@@ -1,44 +1,55 @@
+
 import numpy as np
-print('Введите размер матрицы nxn')
-n = int(input())
-print('Введите вектор а')
-a = [int(i) for i in input().split()]
-print('Введите вектор b')
-b = [int(i) for i in input().split()]
-print('Введите вектор c')
-c = [int(i) for i in input().split()]
-A = np.zeros((n,n))
+import time
+from math import*
+import matplotlib.pyplot as plt
+def sweep(a, b, c, f, n):
+    alpha = np.array([0.0] * (n + 1))
+    beta = np.array([0.0] * (n + 1))
+    for i in range(n):
+        d = a[i] * alpha[i] + b[i]
+        alpha[i + 1] = -c[i] / d
+        beta[i + 1] = (f[i] - a[i] * beta[i]) / d
+    x = np.array([0.0] * n)
+    x[n - 1] = beta[n]
+    for i in range(n - 2, -1, -1):
+        x[i] = alpha[i + 1] * x[i + 1] + beta[i + 1]
+    return x
+  
+k = 5
+sweep_time = np.zeros(k)
+library_time = np.zeros(k)
+for i in range(1,k+1):
+	n = i*1000
+	a = np.random.rand(n)
+	b = np.random.rand(n)
+	c = np.random.rand(n)
+	f = np.random.rand(n)
+	A = np.zeros((n,n))
 
-for i in range(n):
-	for j in range(n):
-		if i == j:
-			A[i][i] = b[i]
-			if j - 1 >=0:
-				A[i][j-1] = a[j]
-			if j + 1 < n:
-				A[i][j + 1] = c[j]
-print(A)
-print('Введите вектор свободных членов')
-f = [int(i) for i in input().split()]
-x = [0] * n
-delta = [0] * n
-lyambda = [0] * n
 
-delta[0] = -A[0][1]/A[0][0]
-lyambda[0] = f[0]/A[0][0]
+	for m in range(n):
+		for k in range(n):
+			if m == k:
+				A[m][m] = b[m]
+				if k - 1 >=0:
+					A[m][k-1] = a[k]
+				if k + 1 < n:
+					A[m][k + 1] = c[k]
 
-for i in range(1, n - 1):
-	d = 0
-	d = A[i][i] + (A[i][i-1]*delta[i-1])
-	delta[i] = -A[i][i+1]/ d
-	lyambda[i] = (f[i] - A[i][i-1]*lyambda[i-1])/d
 
-delta[n-1] = 0
-lyambda[n-1] = (f[n-1] - A[n-1][n-2]*lyambda[n-2])/(A[n-1][n-1] + (A[n-1][n-2]*delta[n-2]))
+	t1 = time.time()
+	x = sweep(a, b, c, f, n)
+	t2 = time.time() - t1
+	sweep_time[i-1] = t2
 
-x[n-1] = lyambda[n-1];
-for i in range(n - 2, -1, -1):
-	x[i] = delta[i] * x[i+1] + lyambda[i];
+	t1 = time.time()
+	x_compare = np.linalg.solve(A,f)
+	t2 = time.time() - t1
+	library_time[i-1] = t2
 
-print(x)
+	print('for n =',n,'||x - x_compare|| = ', max(x_compare - x))
+plt.plot(sweep_time)
+plt.plot(library_time)
+plt.savefig('sweep.png')
 
