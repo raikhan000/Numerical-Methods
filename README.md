@@ -23,5 +23,4 @@ x - вектор который посчитан методом Гаусса
 x_compare - вектор, который получен в результате использования функции np.linalg.solve  
 Программа выводит норму вектора (x - x_compare), чтобы показать как сильно отличаются значения.  
 ### График  
-
-![Image alt](https://github.com/{raikhan000}/{Numerical-Methods}/raw/{raikhan000/Numerical-Methods}/foo.png))
+![alt text](figures/foo.png) 
