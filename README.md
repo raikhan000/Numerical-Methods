@@ -24,4 +24,4 @@ x_compare - вектор, который получен в результате 
 Программа выводит норму вектора (x - x_compare), чтобы показать как сильно отличаются значения.  
 ### График  
 
-![Image alt](https://github.com/{raikhan000}/{Numerical-Methods}/raw/foo.png)
+![Image alt](https://github.com/{raikhan000}/{Numerical-Methods}/raw/{raikhan000/Numerical-Methods}/foo.png))
